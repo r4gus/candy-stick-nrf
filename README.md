@@ -29,9 +29,6 @@ Also make sure that you've `git` installed. Then just run `./build` from the roo
 sudo pacman -S arm-none-eabi-gcc arm-none-eabi-newlib
 ```
 
-> **NOTE**: Without `*-newlib` (Arch) you'll get the `fatal error: stdint.h: No such file or directory
-> # include\_next <stdint.h>` error.
-
 #### Debian/ Ubuntu
 
 ```
