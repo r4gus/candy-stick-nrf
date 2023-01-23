@@ -4,7 +4,7 @@
 ./checkout.sh
 
 # Compile the Zig part of the app
-zig-0.11.0 build-obj \
+zig build-obj \
     -target thumb-freestanding-eabihf \
     -mcpu=cortex_m4 \
     -lc \
