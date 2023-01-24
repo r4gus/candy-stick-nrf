@@ -5,11 +5,14 @@ INC += \
 	src \
 	$(TOP)/hw \
 
-# This didn't work on mac
-#PROJECT_SOURCE += $(wildcard src/*.c)
-#SRC_C += $(addprefix $(CURRENT_PATH)/, $(PROJECT_SOURCE))
-
 SRC_C += src/usb_descriptors.c
+
+INC += src/nrf52
+
+SRC_C += libs/tinyusb/hw/mcu/nordic/nrfx/drivers/src/nrfx_nvmc.c
+
+CFLAGS += -DNRFX_NVMC_ENABLED=1 \
+		  -DNRFX_RNG_ENABLED=1
 
 ZIG_OBJ += main.o
 
