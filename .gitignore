@@ -62,6 +62,7 @@ pubkey
 falsh.bin
 
 /libs/fido2
+/libs/tinyusb
 
 *.zip
 *.swp

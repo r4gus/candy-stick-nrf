@@ -15,6 +15,8 @@ const data_len: usize = fido.data_len;
 const base_addr: usize = 524288; // 512 KiB
 pub var flash_storage = nrf.fstorage.Flash.new(base_addr);
 
+extern fn board_millis() u32;
+
 pub const Impl = struct {
     // TODO: data to be stored in flash (securely)
     // MASTER_SECRET || PIN || SIGN_COUNTER || RETRIES
@@ -25,6 +27,10 @@ pub const Impl = struct {
         x |= @intCast(u32, nrf.getRandom()) << 16;
         x |= @intCast(u32, nrf.getRandom()) << 24;
         return x;
+    }
+
+    pub fn millis() u32 {
+        return board_millis();
     }
 
     pub fn load() [data_len]u8 {

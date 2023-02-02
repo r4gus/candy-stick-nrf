@@ -1,10 +1,10 @@
 #!/bin/bash
 
-./pull-deps.sh
-./checkout.sh
+#./pull-deps.sh
+#./checkout.sh
 
 # Compile the Zig part of the app
-zig build-obj \
+zig-0.11.0 build-obj \
     -target thumb-freestanding-eabihf \
     -mcpu=cortex_m4 \
     -lc \
