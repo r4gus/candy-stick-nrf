@@ -125,13 +125,7 @@ export fn tud_hid_set_report_cb(itf: u8, report_id: u8, report_type: HidReportTy
     _ = report_id;
     _ = report_type;
 
-    //_ = tudHidReport(0, buffer[0..bufsize]);
-
-    var b: [4098]u8 = undefined;
-    var fba = std.heap.FixedBufferAllocator.init(&b);
-    const allocator = fba.allocator();
-
-    var response = ctaphid.handle(allocator, buffer[0..bufsize], &auth);
+    var response = ctaphid.handle(buffer[0..bufsize], &auth);
 
     if (response != null) {
         while (response.?.next()) |r| {
