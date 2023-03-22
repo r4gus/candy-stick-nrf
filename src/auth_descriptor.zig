@@ -12,10 +12,10 @@ pub fn init() void {
 
     auth = fido.Authenticator.new_default(
         [_]u8{
-            0xFA,
-            0x2B,
-            0x99,
-            0xDC,
+            0xCA,
+            0xFE,
+            0xBA,
+            0xBE,
             0x9E,
             0x39,
             0x42,
@@ -60,7 +60,7 @@ pub const Impl = struct {
         return board_millis();
     }
 
-    pub fn load(allocator: std.mem.Allocator) []u8 {
+    pub fn load(allocator: std.mem.Allocator) fido.Resources.LoadError![]u8 {
         var len_raw: [4]u8 = undefined;
         flash_storage.read(len_raw[0..], 0) catch unreachable;
         var len = @intCast(usize, std.mem.readIntSliceLittle(u32, len_raw[0..]));
