@@ -1,8 +1,7 @@
 const std = @import("std");
-const ctaphid = @import("fido").ctaphid;
+const ctaphid = @import("fido").transport_specific_bindings.ctaphid;
 
 const auth_descriptor = @import("auth_descriptor.zig");
-const auth = auth_descriptor.auth;
 
 //--------------------------------------------------------------------+
 // Extern
@@ -125,7 +124,7 @@ export fn tud_hid_set_report_cb(itf: u8, report_id: u8, report_type: HidReportTy
     _ = report_id;
     _ = report_type;
 
-    var response = ctaphid.handle(buffer[0..bufsize], &auth);
+    var response = ctaphid.handle(buffer[0..bufsize], &auth_descriptor.auth.?);
 
     if (response != null) {
         while (response.?.next()) |r| {
