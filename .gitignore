@@ -67,3 +67,6 @@ falsh.bin
 
 *.zip
 *.swp
+
+zig-out
+zig-cache
