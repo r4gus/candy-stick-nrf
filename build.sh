@@ -4,13 +4,10 @@
 #./checkout.sh
 
 # Compile the Zig part of the app
-zig build-obj \
+zig12 build-obj \
     -target thumb-freestanding-eabihf \
     -mcpu=cortex_m4 \
     -lc \
-    --mod zbor::libs/zbor/src/main.zig \
-    --mod fido:zbor:libs/fido2/lib/main.zig \
-    --deps fido \
     -freference-trace \
     -fsingle-threaded \
     -OReleaseSmall \

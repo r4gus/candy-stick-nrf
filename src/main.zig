@@ -1,7 +1,4 @@
 const std = @import("std");
-const ctaphid = @import("fido").transport_specific_bindings.ctaphid;
-
-const auth_descriptor = @import("auth_descriptor.zig");
 
 //--------------------------------------------------------------------+
 // Extern
@@ -44,7 +41,7 @@ fn tudHidReport(report_id: u8, report: []const u8) bool {
     }
 
     // Note: the narrowing int cast is safe because of the check above.
-    return tud_hid_n_report(0, report_id, report.ptr, @intCast(u16, report.len));
+    return tud_hid_n_report(0, report_id, report.ptr, @as(u16, @intCast(report.len)));
 }
 
 // Task function should be called in main loop.
@@ -59,7 +56,6 @@ fn tudTask() void {
 
 export fn main() void {
     board_init();
-    auth_descriptor.init();
 
     // init device stack on configured roothub port.
     _ = tud_init(0);
@@ -84,7 +80,7 @@ const Blink = enum(u32) {
     suspended = 2500,
 };
 
-var blink_interval_ms: u32 = @enumToInt(Blink.not_mounted);
+var blink_interval_ms: u32 = @intFromEnum(Blink.not_mounted);
 
 //--------------------------------------------------------------------+
 // Device callbacks
@@ -92,12 +88,12 @@ var blink_interval_ms: u32 = @enumToInt(Blink.not_mounted);
 
 /// Invoked when device is mounted.
 export fn tud_mount_cb() void {
-    blink_interval_ms = @enumToInt(Blink.mounted);
+    blink_interval_ms = @intFromEnum(Blink.mounted);
 }
 
 // Invoked when device is unmounted.
 export fn tud_umount_cb() void {
-    blink_interval_ms = @enumToInt(Blink.not_mounted);
+    blink_interval_ms = @intFromEnum(Blink.not_mounted);
 }
 
 /// Invoked when usb bus is suspended
@@ -105,12 +101,12 @@ export fn tud_umount_cb() void {
 /// Within 7ms, device must draw an average of current less than 2.5 mA from bus
 export fn tud_suspend_cb(remote_wakeup_en: bool) void {
     _ = remote_wakeup_en;
-    blink_interval_ms = @enumToInt(Blink.suspended);
+    blink_interval_ms = @intFromEnum(Blink.suspended);
 }
 
 // Invoked when usb bus is resumed.
 export fn tud_resume_cb() void {
-    blink_interval_ms = @enumToInt(Blink.mounted);
+    blink_interval_ms = @intFromEnum(Blink.mounted);
 }
 
 //--------------------------------------------------------------------+
@@ -123,19 +119,19 @@ export fn tud_hid_set_report_cb(itf: u8, report_id: u8, report_type: HidReportTy
     _ = itf;
     _ = report_id;
     _ = report_type;
+    _ = buffer;
+    _ = bufsize;
 
-    var response = ctaphid.handle(buffer[0..bufsize], &auth_descriptor.auth.?);
+    //if (response != null) {
+    //    while (response.?.next()) |r| {
+    //        while (!tudHidReady()) {
+    //            tudTask(); // TODO: might lead to strange edge cases but neccessary
+    //            // wait until ready
+    //        }
 
-    if (response != null) {
-        while (response.?.next()) |r| {
-            while (!tudHidReady()) {
-                tudTask(); // TODO: might lead to strange edge cases but neccessary
-                // wait until ready
-            }
-
-            _ = tudHidReport(0, r);
-        }
-    }
+    //        _ = tudHidReport(0, r);
+    //    }
+    //}
 }
 
 // Invoked when received GET_REPORT control request.
